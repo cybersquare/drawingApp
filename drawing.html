@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <style>
+            *{
+                margin: 0;
+                padding: 0;
+            }
+            #content{
+                width: 1020px;
+                height: 580px;
+                margin: 0 auto;
+                border: 2px solid black;
+                margin-top: 40px;
+                cursor: crosshair;;
+            }
+            form{
+                position: absolute;
+                width: 280px;
+                background: blanchedalmond;
+                padding: 10px;
+                font-family: Verdana, Geneva, Tahoma, sans-serif;
+            }
+
+        </style>
+
+    </head>
+    <body>
+        <div id="content">
+            <form>
+                Thickness:<input type="number" id="thickness" min="1" max="25" value="5" onchange="changeThickness()">
+                color:<input type="color" id="color" onchange="changeColor()">
+            </form>
+            <canvas id="mycanvas"></canvas>
+        </div>
+        <script type="text/javascript">
+        var canvas=document.getElementById("mycanvas");
+        var cntxt=canvas.getContext("2d");
+        var painting=document.getElementById("content");
+        var paintStyle=window.getComputedStyle(painting,null);
+        canvas.width=parseInt(paintStyle.getPropertyValue("width"))
+        canvas.height=parseInt(paintStyle.getPropertyValue("height"))
+        var mouse= { x:0 , y:0};
+
+        canvas.addEventListener("mousemove",function(e){
+            mouse.x=e.pageX-this.offsetLeft;
+            mouse.y=e.pageY-this.offsetTop;
+
+        },false);
+
+        cntxt.lineWidth=5;
+        cntxt.lineJoin='round';
+        cntxt.lineCap='round';
+         
+        canvas.addEventListener('mousedown',function(e){
+            cntxt.beginPath();
+            cntxt.moveTo(mouse.x,mouse.y);
+            canvas.addEventListener('mousemove',onPaint,false);
+        }, false) ;
+
+        canvas.addEventListener('mouseup',function(){
+            canvas.removeEventListener('mousemove',onPaint,false);
+
+        },false)
+
+        var onPaint=function(){
+            cntxt.lineTo(mouse.x,mouse.y);
+            cntxt.stroke(); 
+        };
+
+        function changeThickness(){
+            thickness=document.getElementById("thickness").value;
+            cntxt.lineWidth=thickness
+        }
+        function changeColor(){
+            color=document.getElementById("color").value;
+            cntxt.strokeStyle=color
+        }
+
+
+        </script>
+
+    </body>
+</html>
